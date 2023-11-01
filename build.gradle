@@ -27,10 +27,11 @@ import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType;
 
 plugins {
+    id 'java-library'
     id 'application'
     id 'eclipse'
     id 'idea'
-    id "org.ajoberstar.grgit" version "2.1.0"
+    id "org.ajoberstar.grgit" version "2.2.1"
     id "com.github.hierynomus.license" version "0.14.0"
     id "com.scuilion.syntastic" version "0.3.8"
 }
@@ -67,22 +68,25 @@ repositories {
 }
 
 dependencies {
-    compile 'commons-io:commons-io:2.6'
-    compile 'commons-cli:commons-cli:1.4'
-    compile 'org.apache.commons:commons-math3:3.6.1'
-    compile 'commons-codec:commons-codec:1.11'
-    compile 'com.thoughtworks.xstream:xstream:1.4.10'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'de.uni-passau.fim.seibt:kvconfig:1.0'
-    compile project(':JNativeMerge')
-    compile files('lib/extendj.jar')
-    testCompile 'junit:junit:4.12'
+    api 'commons-io:commons-io:2.6'
+    api 'commons-cli:commons-cli:1.4'
+    api 'org.apache.commons:commons-math3:3.6.1'
+    api 'commons-codec:commons-codec:1.11'
+    api 'com.thoughtworks.xstream:xstream:1.4.10'
+    api 'com.google.code.gson:gson:2.8.2'
+    api 'de.uni-passau.fim.seibt:kvconfig:1.0'
+    api project(':JNativeMerge')
+    api files('lib/extendj.jar')
+    implementation group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
+    testImplementation 'junit:junit:4.12'
 }
 
+/*
 task wrapper(type: Wrapper) {
     distributionType DistributionType.ALL
     gradleVersion '4.4'
 }
+*/
 
 def testFilesDir = new File(rootProject.buildDir, 'jdime-testfiles')
 
@@ -161,7 +165,7 @@ distributions.with {
 }
 
 installDist {
-
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     if (project.hasProperty('distDir')) {
         destinationDir = file(project.property('distDir'))
     }
